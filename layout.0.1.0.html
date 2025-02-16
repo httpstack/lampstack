@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5; <title>Document</title>
+    <style type="text/css">
+        :root {
+            /*TYPOGRAPHY*/
+            --ff-sansserif: Arial, sans-serif;
+            --ff-monospace: 'Courier New', monospace;
+            --fs-default: 16px;
+            --lh-default: 1.5;
+            /*COLORS*/                                                                                                                                                                                                          
+            --color-primary: #007bff;
+            --color-secondary: #6c757d;
+            --color-success: #28a745;
+            --color-danger: #dc3545;
+            --color-warning: #ffc107;
+            --color-info: #17a2b8;
+            --color-light: #f8f9fa;
+            --color-dark: #343a40;
+            --color-white: #ffffff;
+            --color-black: #000000;
+            /*SPACING*/
+            --spacing-xxs: 0.25rem;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-xxl: 4rem;
+            /*BORDER RADIUS*/
+            --border-radius: 0.25rem;
+            /*BOX SHADOW*/
+            --box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+            /*Z-INDEX*/
+            --z-index-1: 100;
+            --z-index-2: 200;
+            --z-index-3: 300;
+            --z-index-4: 400;
+            --z-index-5: 500;
+            /*MARGINS/PADDING*/
+            --m0: 0;
+            --m1: 0.25rem;
+            --m2: 0.5rem;
+            --m3: 1rem;
+            --m4: 1.5rem;
+            --m5: 3rem;
+            --p0: 0;
+            --p1: 0.25rem;
+            --p2: 0.5rem;
+            --p3: 1rem;
+            --p4: 1.5rem;
+            --p5: 3rem;
+
+            /*BREAKPOINTS*/
+            --breakpoint-sm: 576px;
+            --breakpoint-md: 768px;
+            --breakpoint-lg: 992px;
+            --breakpoint-xl: 1200px;
+        
+            /*MEDIA QUERIES*/
+            --mq-sm: (min-width: 576px);
+            --mq-md: (min-width: 768px);
+            --mq-lg: (min-width: 992px);
+            --mq-xl: (min-width: 1200px);
+
+            /*GRID*/
+            --grid-gap: 1rem;
+            --grid-columns: 12;
+            --grid-container: 114rem;
+            --grid-container-sm: 540px;
+            --grid-container-md: 720px;
+            --grid-container-lg: 960px;
+            --grid-container-xl: 1140px;
+        }
+        body {
+            display: flex;
+            flex-direction: column;;
+            justify-content: center;
+            align-items: start;
+            height: 100vh;
+            margin: 0;
+            color: var(--color-dark);
+            background-color: var(--color-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="container-brand">
+            <div class="brand-logo">
+                <i class="bi bi-bike">Logo</i>
+            </div>
+            <div class="brand-name">
+                SiteName
+            </div>
+        </div>
+        <div class="container-nav">
+            <ul class="nav-ul">
+                <li class="ul-li">
+                    <a href="#" class="li-link">Home</a>
+                </li>
+                <li class="ul-li">
+                    <a href="#" class="li-link">About</a>
+                </li>
+                <li class="ul-li">
+                    <a href="#" class="li-link">Services</a>
+                </li>
+                <li class="ul-li">
+                    <a href="#" class="li-link">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
