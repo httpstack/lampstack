@@ -1,7 +1,7 @@
 <?php
 
 class Services {
-    public $strSubRoutes
+    
     public function __constructor($strSubRoutes){
         
     }
