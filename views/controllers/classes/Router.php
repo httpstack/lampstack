@@ -12,8 +12,6 @@ class Router {
             $pattern = preg_replace('/:\w+/', '(\d+)', $pattern); // Match digits for parameters
             if (preg_match("#^$pattern$#", $request, $matches)) {
                 array_shift($matches); // Remove the full match
-                $varControllerClass = $callback[0];
-                
                 if (is_array($callback) && is_string($callback[0])) {
                     $controller = new $callback[0](...$matches);
                     return call_user_func([$controller, $callback[1]]);
