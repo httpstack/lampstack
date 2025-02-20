@@ -3,6 +3,7 @@
 class Router {
     private $routes = [];
     private $middleware = [];
+    private $renderedDocument;
 
     public function addRoute($pattern, $callback) {
         $this->routes[$pattern] = $callback;
@@ -15,14 +16,16 @@ class Router {
         }
         $this->middleware[] = ['pattern' => $pattern, 'middleware' => $middleware];
     }
+
     static public function redirect($url) {
         header("Location: $url");
         exit();
     }
+
     public function dispatch($request) {
         foreach ($this->middleware as $mw) {
             if ($this->matchPattern($mw['pattern'], $request)) {
-                call_user_func($mw['middleware'], $request);
+                call_user_func($mw['middleware'], $request, $this);
             }
         }
 
@@ -39,7 +42,7 @@ class Router {
                     $urlVars = $this->extractUrlVars($pattern, $request);
                     // Create the controller instance with the extracted variables
                     $objRouteController = new $varControllerClass($strSubRoutes, $urlVars);
-                    return call_user_func([$objRouteController, $strControllerMethod]);
+                    return call_user_func([$objRouteController, $strControllerMethod], $this->renderedDocument);
                 } else {
                     return call_user_func($callback, $matches);
                 }
@@ -69,6 +72,14 @@ class Router {
     private function matchPattern($pattern, $request) {
         $pattern = str_replace('*', '.*', $pattern);
         return preg_match("#^$pattern$#", $request);
+    }
+
+    public function setRenderedDocument($document) {
+        $this->renderedDocument = $document;
+    }
+
+    public function getRenderedDocument() {
+        return $this->renderedDocument;
     }
 }
 ?>

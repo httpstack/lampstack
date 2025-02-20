@@ -1,33 +1,41 @@
 <?php
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require '../controllers/classes/Router.php';
-require '../controllers/routes/Home.php';
-require '../controllers/routes/About.php';
-require '../controllers/routes/Services.php';
-require '../controllers/routes/User.php';
+require '../src/controllers/classes/Router.php';
+require '../src/controllers/classes/Doc.php';
+require '../src/controllers/classes/File.php';
+require '../src/controllers/classes/Template.php';
+require '../src/controllers/routes/Home.php';
+require '../src/controllers/routes/About.php';
+require '../src/controllers/routes/Services.php';
+require '../src/controllers/routes/User.php';
 
 $router = new Router();
-// Example middleware for all routes
-$router->use('*', function($request) {
-    // Log the request
-    error_log("Request: " . $request);
+
+// Middleware to prepare the template
+$router->use('*', function($request, $router) {
+    $template = new Template('../views/template.php');
+    $template->addData('title', 'My Page Title');
+    $template->addData('content', 'This is the content of the page.');
+    $document = $template->render();
+    $router->setRenderedDocument($document);
 });
 
 // Example middleware for specific route
-$router->use('/user/*', function($request) {
+$router->use('/user/*', function($request, $router) {
     // Check authentication
     if (!isset($_SESSION['user'])) {
         Router::redirect('/login');
     }
 });
+
 // Define routes
 $router->addRoute('/', ['Home', 'index']);
 $router->addRoute('/About', ['About', 'index']);
 $router->addRoute('/Services/Development', ['Services', 'index', '/Development']);
+$router->addRoute('/Services', ['Services', 'index']);
 $router->addRoute('/user/:intUserID/dash/inbox/message/:intMessageID', ['User', 'index', '/dash/inbox/message']);
 
 // Get the request URI and remove the "public" part

@@ -13,11 +13,7 @@ class Services {
         if ($this->strSubRoutes) {
             $arrRoutes = explode("/", trim($this->strSubRoutes, '/'));
             $strRoute = ucfirst(array_shift($arrRoutes));
-            if (method_exists($this, $strRoute)) {
-                $this->$strRoute($arrRoutes);
-            } else {
-                echo "Route not found.";
-            }
+            $this->$strRoute($arrRoutes);
         } else {
             $this->Services();
         }
