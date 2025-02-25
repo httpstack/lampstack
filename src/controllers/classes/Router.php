@@ -5,8 +5,8 @@ class Router {
     private $middleware = [];
     private $renderedDocument;
 
-    public function addRoute($pattern, $callback) {
-        $this->routes[$pattern] = $callback;
+    public function addRoute($strMethod, $pattern, $callback) {
+        $this->routes[$pattern] = [$strMethod, $callback];
     }
 
     public function use($pattern, $middleware = null) {
@@ -17,19 +17,41 @@ class Router {
         $this->middleware[] = ['pattern' => $pattern, 'middleware' => $middleware];
     }
 
+    public function get($pattern, $callback) {
+        $this->addRoute("GET", $pattern, $callback);
+    }
+
+    public function post($pattern, $callback) {
+        $this->addRoute("POST", $pattern, $callback);
+    }
+
+    public function put($pattern, $callback) {
+        $this->addRoute("PUT", $pattern, $callback);
+    }
+
+    public function delete($pattern, $callback) {
+        $this->addRoute("DELETE", $pattern, $callback);
+    }
+
     static public function redirect($url) {
         header("Location: $url");
         exit();
     }
 
     public function dispatch($request) {
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+
         foreach ($this->middleware as $mw) {
             if ($this->matchPattern($mw['pattern'], $request)) {
                 call_user_func($mw['middleware'], $request, $this);
             }
         }
 
-        foreach ($this->routes as $pattern => $callback) {
+        foreach ($this->routes as $pattern => [$strMethod, $callback]) {
+            if ($strMethod !== $requestMethod) {
+                continue;
+            }
+
             $patternRegex = preg_replace('/:\w+/', '(\d+)', $pattern); // Match digits for parameters
             if (preg_match("#^$patternRegex$#", $request, $matches)) {
                 array_shift($matches); // Remove the full match
@@ -37,15 +59,11 @@ class Router {
                 $strControllerMethod = $callback[1];
                 $strSubRoutes = isset($callback[2]) ? $callback[2] : '';
 
-                if (is_string($callback[0])) {
-                    // Extract URL variables
-                    $urlVars = $this->extractUrlVars($pattern, $request);
-                    // Create the controller instance with the extracted variables
-                    $objRouteController = new $varControllerClass($strSubRoutes, $urlVars);
-                    return call_user_func([$objRouteController, $strControllerMethod], $this->renderedDocument);
-                } else {
-                    return call_user_func($callback, $matches);
-                }
+                 // Extract URL variables
+                $urlVars = $this->extractUrlVars($pattern, $request);
+                // Create the controller instance with the extracted variables
+                $objRouteController = new $varControllerClass($strSubRoutes, $urlVars);
+                return call_user_func([$objRouteController, $strControllerMethod], $this->renderedDocument, $strMethod);
             }
         }
 

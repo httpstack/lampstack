@@ -5,11 +5,18 @@ class Template {
     public $doc;
     private $arrData = [];
     private $rendered = null;
-
+    private $arrDeps = [];
     public function __construct($templatePath) {
         $this->file = new File();
         $this->doc = new Doc($this->file);
         $this->doc->loadTemplate($templatePath);
+            
+        $this->arrDeps["CSS"] = array();
+        $this->arrDeps["CSS"]["main"] = "/src/static/css/style.css";
+        $this->arrDeps["JS"] = array();
+        $this->arrDeps["JS"]["main"] = "/src/static/js/script.js";
+        $this->addDepends();
+        
     }
 
     public function addData($key, $value = null) {
@@ -51,7 +58,23 @@ class Template {
         $this->rendered = $this->doc->saveHTML();
         return $this->rendered;
     }
-
+    private function addDepends(){
+        $objHead = $this->doc->select("//head");
+        $arrCss = $this->arrDeps["CSS"];
+        $arrJs = $this->arrDeps["JS"];
+        foreach($arrCss as $k => $v){
+            $objSheet = $this->doc->createElement("link");
+            $objSheet->setAttribute("type", "text/css");
+            $objSheet->setAttribute("href", $v);
+            $objSheet->setAttribute("rel", "stylesheet");
+            $objHead[0]->appendChild($objSheet);
+        }
+        foreach($arrJs as $k => $v){
+            $objScript = $this->doc->createElement("script");
+            $objScript->setAttribute("src", $v);
+            $objHead[0]->appendChild($objScript);
+        }
+    }
     private function isHTML($string) {
         return preg_match("/<[^<]+>/", $string, $m) != 0;
     }

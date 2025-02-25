@@ -8,8 +8,7 @@ class Home {
         $this->strSubRoutes = $strSubRoutes ? $strSubRoutes : null;
         $this->arrUrlVars = $arrUrlVars;
     }
-    public function index() {
-        echo "Welcome to the home page!";
+    public function index($renderedDocument, $strMethod) {
+        echo $strMethod . " was the method used to fetch the home page!";
     }
 }
-?>

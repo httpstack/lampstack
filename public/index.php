@@ -16,7 +16,7 @@ $router = new Router();
 
 // Middleware to prepare the template
 $router->use('*', function($request, $router) {
-    $template = new Template('../views/template.php');
+    $template = new Template('../src/templates/public.html');
     $template->addData('title', 'My Page Title');
     $template->addData('content', 'This is the content of the page.');
     $document = $template->render();
@@ -32,11 +32,11 @@ $router->use('/user/*', function($request, $router) {
 });
 
 // Define routes
-$router->addRoute('/', ['Home', 'index']);
-$router->addRoute('/About', ['About', 'index']);
-$router->addRoute('/Services/Development', ['Services', 'index', '/Development']);
-$router->addRoute('/Services', ['Services', 'index']);
-$router->addRoute('/user/:intUserID/dash/inbox/message/:intMessageID', ['User', 'index', '/dash/inbox/message']);
+$router->get('/', ['Home', 'index']);
+$router->get('/About', ['About', 'index']);
+$router->get('/Services/Development', ['Services', 'index', '/Development']);
+$router->get('/Services', ['Services', 'index']);
+$router->get('/user/:intUserID/dash/inbox/message/:intMessageID', ['User', 'index', '/dash/inbox/message']);
 
 // Get the request URI and remove the "public" part
 $request = $_SERVER['REQUEST_URI'];
@@ -44,4 +44,4 @@ $request = preg_replace("/^\/public/", "", $request);
 
 // Dispatch the request
 $router->dispatch($request);
-?>
+?>kkkkkkkkkkkkkkkkkkkkk
