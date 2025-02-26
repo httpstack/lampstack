@@ -76,6 +76,9 @@ class Router {
                 // Extract sub-route
                 $subRoute = $this->extractSubRoute($pattern, $request);
 
+                // Debugging output
+                error_log("Dispatching to controller: $varControllerClass, method: $strControllerMethod, sub-route: $subRoute");
+
                 // Create the controller instance with the extracted variables
                 $objRouteController = new $varControllerClass($subRoute, $urlVars);
                 return call_user_func([$objRouteController, $strControllerMethod], $this->renderedDocument, $strMethod);

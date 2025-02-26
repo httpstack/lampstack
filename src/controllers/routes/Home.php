@@ -9,6 +9,9 @@ class Home {
         $this->arrUrlVars = $arrUrlVars;
     }
     public function index($renderedDocument, $strMethod) {
-        echo $strMethod . " was the method used to fetch the home page!";
+        echo "HTTP Method: " . $strMethod . "<br>";
+        echo $renderedDocument;
     }
 }
+
+?>

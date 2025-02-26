@@ -2,46 +2,45 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', '/var/www/html/logs/errors.log'); // Specify your desired log file path
 
-require '../src/controllers/classes/Router.php';
+require '../src/controllers/classes/_Router.php';
 require '../src/controllers/classes/Doc.php';
 require '../src/controllers/classes/File.php';
 require '../src/controllers/classes/Template.php';
+require '../src/controllers/routes/Products.php';
 require '../src/controllers/routes/Home.php';
-require '../src/controllers/routes/About.php';
-require '../src/controllers/routes/Services.php';
-require '../src/controllers/routes/User.php';
 
 $router = new Router();
 
 // Middleware to prepare the template
-$router->use('*', function($request, $router) {
+$router->use('*', function($request, $router, $next) {
     $template = new Template('../src/templates/public.html');
     $template->addData('title', 'My Page Title');
     $template->addData('content', 'This is the content of the page.');
     $document = $template->render();
     $router->setRenderedDocument($document);
+    $next();
 });
 
 // Example middleware for specific route
-$router->use('/user/*', function($request, $router) {
+$router->use('/user/*', function($request, $router, $next) {
     // Check authentication
     if (!isset($_SESSION['user'])) {
         Router::redirect('/login');
     }
+    $next();
 });
 
-// Define routes
+// Define routes for CRUD operations
 $router->get('/', ['Home', 'index']);
-$router->get('/About', ['About', 'index']);
-$router->get('/Services/Development', ['Services', 'index', '/Development']);
-$router->get('/Services', ['Services', 'index']);
-$router->get('/user/:intUserID/dash/inbox/message/:intMessageID', ['User', 'index', '/dash/inbox/message']);
-
-// Get the request URI and remove the "public" part
-$request = $_SERVER['REQUEST_URI'];
-$request = preg_replace("/^\/public/", "", $request);
+$router->get('/Products', ['Products', 'index']);
+$router->get('/Products/:id', ['Products', 'show']);
+$router->post('/Products', ['Products', 'create']);
+$router->put('/Products/:id', ['Products', 'update']);
+$router->delete('/Products/:id', ['Products', 'delete']);
 
 // Dispatch the request
-$router->dispatch($request);
-?>kkkkkkkkkkkkkkkkkkkkk
+$router->dispatch();
+?>
